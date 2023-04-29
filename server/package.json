@@ -1,0 +1,32 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nicocchi/bookrunner.git"
+  },
+  "author": "Nicocchi",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Nicocchi/bookrunner/issues"
+  },
+  "homepage": "https://github.com/Nicocchi/bookrunner#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mime-types": "^2.1.35",
+    "mongoose": "^7.0.4",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22"
+  }
+}
