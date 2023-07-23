@@ -1,29 +1,32 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import axios from "../../utils/axios.config"
 
 function AddBooks() {
-  const [authors, setAuthors] = useState([]);
+  const [authors, setAuthors] = useState<any[]>([]);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [publishDate, setPublishDate] = useState(new Date());
   const [pageCount, setPageCount] = useState(1);
   const [description, setDescription] = useState("");
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState<any | null>(null);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/authors", {})
-      .then((res) => {
+      .get("/authors", {})
+      .then((res: any) => {
         console.log(res.data);
         setAuthors(res.data.authors);
         setAuthor(res.data.authors[0]._id)
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
     console.log({
         title,
@@ -34,7 +37,7 @@ function AddBooks() {
         coverImage
     })
     axios
-      .post("http://localhost:5000/books", {
+      .post("/books", {
         title,
         author,
         publishDate,
@@ -46,15 +49,15 @@ function AddBooks() {
             'Content-Type': 'multipart/form-data'
         }
       })
-      .then((res) => {
+      .then((res: any) => {
         console.log(res.data);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const setAuth = (e) => {
+  const setAuth = (e: any) => {
     console.log("AUTH", e);
   }
 
@@ -77,8 +80,8 @@ function AddBooks() {
           type="date"
           name="publishDate"
           placeholder="publishDate"
-          value={publishDate}
-          onChange={(e) => setPublishDate(e.target.value)}
+          value={publishDate.toDateString()}
+          onChange={(e) => setPublishDate(new Date(e.target.value))}
         />
         <input
           type="number"
@@ -86,7 +89,7 @@ function AddBooks() {
           min="1"
           placeholder="pageCount"
           value={pageCount}
-          onChange={(e) => setPageCount(e.target.value)}
+          onChange={(e) => setPageCount(Number(e.target.value))}
         />
         <textarea
           name="description"
@@ -98,6 +101,8 @@ function AddBooks() {
           type="file"
           name="cover"
           placeholder="coverImage"
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           onChange={(e) => setCoverImage(e.target.files[0])}
         />
         <button onClick={onSubmit}>submit</button>

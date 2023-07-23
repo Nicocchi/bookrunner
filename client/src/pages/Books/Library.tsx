@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import axios from "../../utils/axios.config"
 import {
   Text,
   Card,
@@ -10,14 +13,12 @@ import {
   Switch,
   Modal,
   Textarea,
-  Avatar,
   Grid,
-  Spacer,
   Tooltip,
   Badge,
 } from "@nextui-org/react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { BookOpen } from "@icon-park/react";
+import { useLocation, useNavigate } from "react-router-dom";
+// import { BookOpen } from "@icon-park/react";
 import Select from "react-select";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
@@ -43,7 +44,7 @@ registerPlugin(
 // }
 
 const selectStyle = {
-  control: (base) => ({
+  control: (base: any) => ({
     ...base,
     // background: "#16181a",
     color: "#16181a",
@@ -52,24 +53,24 @@ const selectStyle = {
     boxShadow: "none",
     width: 170,
   }),
-  option: (base) => ({
+  option: (base: any) => ({
     ...base,
     // background: "#16181a",
     marginTop: 0,
     zIndex: 1000,
   }),
-  menu: (base) => ({
+  menu: (base: any) => ({
     ...base,
     // background: "#16181a",
     width: 170,
     zIndex: 1000,
   }),
-  menuList: (base) => ({
+  menuList: (base: any) => ({
     ...base,
     // background: "#16181a",
     padding: 0,
   }),
-  indicatorSeparator: (base) => ({
+  indicatorSeparator: (base: any) => ({
     ...base,
     border: "none",
     visibility: "hidden",
@@ -84,8 +85,8 @@ const BookDetailsCard = ({
   format,
   description,
   ...props
-}) => {
-  const [following, setFollowing] = React.useState(false);
+}: {css: any, onClick: any, title: any, author: any, format: any, description: any}) => {
+  // const [following, setFollowing] = React.useState(false);
 
   return (
     <Grid.Container
@@ -106,7 +107,7 @@ const BookDetailsCard = ({
                 {title}
               </Text>
               <div style={{ display: "flex", gap: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {author.map((a, i) => (
+                {author.map((a: any, i: number) => (
                   <Text
                   key={i}
                     size={14}
@@ -163,20 +164,20 @@ const BookDetailsCard = ({
 function Library() {
   const [books, setBooks] = useState([]);
   const [visible, setVisible] = React.useState(false);
-  const [authors, setAuthors] = useState([]);
-  const [artists, setArtists] = useState([]);
-  const [formats, setFormats] = useState([]);
-  const [genres, setGenres] = useState([]);
+  const [authors, setAuthors] = useState<any[]>([]);
+  const [artists, setArtists] = useState<any[]>([]);
+  const [formats, setFormats] = useState<any[]>([]);
+  const [genres, setGenres] = useState<any[]>([]);
   const [bookTitle, setBookTitle] = useState("");
-  const [bookAuthor, setBookAuthor] = useState([]);
-  const [bookArtist, setBookArtist] = useState([]);
-  const [bookGenre, setBookGenre] = useState([]);
+  const [bookAuthor, setBookAuthor] = useState<any[]>([]);
+  const [bookArtist, setBookArtist] = useState<any[]>([]);
+  // const [bookGenre, setBookGenre] = useState<any[]>([]);
   const [bookPublishDate, setBookPublishDate] = useState(new Date());
   const [bookPageCount, setBookPageCount] = useState(1);
   const [bookDescription, setBookDescription] = useState("");
-  const [bookType, setBookType] = useState({});
-  const [files, setFiles] = useState([]);
-  const [bookFile, setBookFile] = useState([]);
+  const [bookType, setBookType] = useState({value: ""});
+  const [files, setFiles] = useState<any[]>([]);
+  const [bookFile, setBookFile] = useState<any[]>([]);
   const [bookPublic, setBookPublic] = useState(false);
 
   const navigate = useNavigate();
@@ -185,11 +186,12 @@ function Library() {
   useEffect(() => {
     if (location.search !== "") {
       axios
-        .get(`http://localhost:5000/books${location.search}`, {})
-        .then((res) => {
+        .get(`/books${location.search}`, {})
+        .then((res: any) => {
           setBooks(res.data.books);
+          setBookType({value: ""});
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log(err);
         });
     } else {
@@ -305,11 +307,11 @@ function Library() {
       });
   };
 
-  const viewBook = (id: string, mimetype: string) => {
-    localStorage.setItem("contentId", id);
-    localStorage.setItem("mimetype", mimetype);
-    window.open(`/book/viewer`, "_blank");
-  };
+  // const viewBook = (id: string, mimetype: string) => {
+  //   localStorage.setItem("contentId", id);
+  //   localStorage.setItem("mimetype", mimetype);
+  //   window.open(`/book/viewer`, "_blank");
+  // };
 
   return (
     <>
@@ -386,21 +388,19 @@ function Library() {
             flexFlow: "wrap",
           }}
         >
-          {books.map((b, i) => (
+          {books.map((b: any, i) => (
             <Tooltip
               key={i}
               placement="rightStart"
               leaveDelay={0.05}
               offset={30}
-              content={
-                <BookDetailsCard
-                  title={b?.title}
-                  author={b?.author}
-                  description={b?.description}
-                  format={b?.bookType?.name}
-                />
-              }
-            >
+              content={<BookDetailsCard
+                title={b?.title}
+                author={b?.author}
+                description={b?.description}
+                format={b?.bookType?.name}
+                css=""
+                onClick={() => { } } />} css={undefined} color={undefined} contentColor={undefined}            >
               <div style={{ width: "185px" }}>
                 <Card
                   key={i}
@@ -452,7 +452,7 @@ function Library() {
             <Text aria-label="Author">Author</Text>
             <Select
               aria-label="Book Author"
-              onChange={setBookAuthor}
+              onChange={(value) => setBookAuthor([...value])}
               isMulti
               value={bookAuthor}
               placeholder="Authors"
@@ -462,7 +462,7 @@ function Library() {
             <Select
               aria-label="Book Artist"
               isMulti
-              onChange={setBookArtist}
+              onChange={(value) => setBookArtist([...value])}
               value={bookArtist}
               placeholder="Artists"
               options={artists}
@@ -472,7 +472,7 @@ function Library() {
               aria-label="Book Type"
               name="bookType"
               isSearchable={true}
-              onChange={setFormats}
+              onChange={(value) => setFormats([...[value]])}
               value={bookType}
               placeholder="Book Type"
               options={formats}
@@ -481,15 +481,15 @@ function Library() {
               aria-label="Published Date"
               type="date"
               placeholder="Published Date"
-              value={bookPublishDate}
-              onChange={(e) => setBookPublishDate(e.target.value)}
+              value={bookPublishDate.toDateString()}
+              onChange={(e) => setBookPublishDate(new Date(e.target.value))}
             />
             <Input
               aria-label="Page Count"
               type="number"
               placeholder="Page Count"
               value={bookPageCount}
-              onChange={(e) => setBookPageCount(e.target.value)}
+              onChange={(e) => setBookPageCount(Number(e.target.value))}
             />
             <Textarea
               aria-label="Book Description"
@@ -527,7 +527,7 @@ function Library() {
             <Text aria-label="Is a public book?">Public?</Text>
             <Switch
               checked={bookPublic}
-              onChange={(e) => setBookPublic(e.target.checked)}
+              onChange={(e: any) => setBookPublic(e.target.checked)}
             />
           </Modal.Body>
           <Modal.Footer>

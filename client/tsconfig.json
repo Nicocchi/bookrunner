@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "es5", "es6"],
     "module": "ESNext",
     "skipLibCheck": true,
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "components/*": [
         "./src/components/*"
       ],
-      "utilities/*": [
-        "./src/utilities"
+      "utils/*": [
+        "./src/utils"
       ]
     },
 

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { ReactReader } from "react-reader";
-import { Document, Page, pdfjs, Outline } from "react-pdf";
+import { Document, Page, pdfjs } from "react-pdf";
 
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+// import axios from "axios";
 import { Button, Text } from "@nextui-org/react";
-import { ArrowCircleRight, ArrowCircleLeft } from "@icon-park/react";
+// import { ArrowCircleRight, ArrowCircleLeft } from "@icon-park/react";
 
 import Cursor from "../../components/Cursor/Cursor";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -17,38 +17,38 @@ const options = {
   cMapPacked: true,
 };
 
-const BookView = ({ url }) => {
+const BookView = () => {
   const [document, setDocument] = useState("");
-  const [documentEpub, setDocumentEpub] = useState(null);
-  const [mimetype, setMimetype] = useState("");
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [scale, setScale] = useState(100);
-  const [isLeft, setIsLeft] = useState(false);
-  const [isNormal, setIsNormal] = useState(true);
-  const [location, setLocation] = useState(null);
-  const locationChanged = (epubcifi) => {
+  // const [documentEpub, setDocumentEpub] = useState(null);
+  const [mimetype, setMimetype] = useState<string>("");
+  const [numPages, setNumPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [scale, setScale] = useState<number>(100);
+  const [isLeft, setIsLeft] = useState<boolean>(false);
+  const [isNormal, setIsNormal] = useState<boolean>(true);
+  const [location, setLocation] = useState<any | null>(null);
+  const locationChanged = (epubcifi: any) => {
     // epubcifi is a internal string used by epubjs to point to a location in an epub. It looks like this: epubcfi(/6/6[titlepage]!/4/2/12[pgepubid00003]/3:0)
     setLocation(epubcifi);
   };
 
-  const params = useParams();
+  // const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     // do stuff here
     const file = localStorage.getItem("contentId");
-    const mt = localStorage.getItem("mimetype");
+    const mt = localStorage.getItem("mimetype") || "";
     setMimetype(mt);
     setDocument(`http://localhost:5000/uploads/books/${file}`);
 
   }, []);
 
-  const onDocumentLoadSuccess = ({ numPages }) => {
+  const onDocumentLoadSuccess = ({ numPages }: {numPages: number}) => {
     setNumPages(numPages);
   };
 
-  const changePage = (offset) => {
+  const changePage = (offset: number) => {
     setPageNumber((prevPageNumber) => prevPageNumber + offset);
   };
 
@@ -66,9 +66,9 @@ const BookView = ({ url }) => {
     changePage(1);
   };
 
-  const onItemClick = ({ pageNumber: itemPageNumber }) => {
-    setPageNumber(itemPageNumber);
-  };
+  // const onItemClick = ({ pageNumber: itemPageNumber }: {pageNumber: number, itemPageNumber: number}) => {
+  //   setPageNumber(itemPageNumber);
+  // };
 
   if (mimetype === "application/epub+zip") {
     return (
@@ -77,6 +77,8 @@ const BookView = ({ url }) => {
           location={location}
           locationChanged={locationChanged}
           url={document}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           epubOptions={{
             allowScriptedContent: true,
           }}
@@ -85,14 +87,14 @@ const BookView = ({ url }) => {
         />
       </div>
     );
-  }
-
-  if (mimetype === "application/pdf") {
+  } else if (mimetype === "application/pdf") {
     return (
       <div className="container">
         <Cursor isLeft={isLeft} isNormal={isNormal} />
         <div className="container__document">
           <TransformWrapper>
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          @ts-ignore */}
             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
               <>
                 <TransformComponent>
@@ -188,6 +190,8 @@ const BookView = ({ url }) => {
         </div>
       </div>
     );
+  } else {
+    return (<div></div>)
   }
 };
 

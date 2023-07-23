@@ -4,19 +4,19 @@ import { useEffect, useRef } from "react";
 import "../../assets/arrow-circle-left.svg"
 import "../../assets/arrow-circle-right.svg"
 
-const Cursor = ({ isLeft, isNormal }) => {
-  const dot = useRef(null);
-  const dotOutline = useRef(null);
+const Cursor = ({ isLeft, isNormal }: {isLeft: any, isNormal: any}) => {
+  const dot = useRef<any>(null);
+  const dotOutline = useRef<any>(null);
 
   const cursorVisible = useRef(true);
   const cursorEnlarged = useRef(false);
 
   const endX = useRef(window.innerWidth / 2);
   const endY = useRef(window.innerHeight / 2);
-  const _x = useRef(0);
-  const _y = useRef(0);
+  // const _x = useRef(0);
+  // const _y = useRef(0);
 
-  const requestRef = useRef(null);
+  // const requestRef = useRef(null);
 
   useEffect(() => {
     document.addEventListener("mousedown", mouseOverEvent);
@@ -74,7 +74,7 @@ const Cursor = ({ isLeft, isNormal }) => {
     toggleCursorVisibility();
   };
 
-  const mouseMoveEvent = (e) => {
+  const mouseMoveEvent = (e: any) => {
     cursorVisible.current = true;
     toggleCursorVisibility();
 

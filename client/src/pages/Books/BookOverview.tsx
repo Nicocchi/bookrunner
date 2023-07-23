@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import axios from "../../utils/axios.config"
 import {
   Image,
   Text,
@@ -31,20 +34,20 @@ registerPlugin(
 );
 
 function BookOverview() {
-  const [book, setBook] = useState(null);
+  const [book, setBook] = useState<any | null>(null);
   const [visible, setVisible] = React.useState(false);
-  const [authors, setAuthors] = useState([]);
-  const [artists, setArtists] = useState([]);
-  const [bookTypes, setBookTypes] = useState([]);
+  const [authors, setAuthors] = useState<any[]>([]);
+  const [artists, setArtists] = useState<any[]>([]);
+  const [bookTypes, setBookTypes] = useState<any[]>([]);
   const [bookTitle, setBookTitle] = useState("");
-  const [bookAuthor, setBookAuthor] = useState([]);
-  const [bookArtist, setBookArtist] = useState([]);
+  const [bookAuthor, setBookAuthor] = useState<any[]>([]);
+  const [bookArtist, setBookArtist] = useState<any[]>([]);
   const [bookPublishDate, setBookPublishDate] = useState(new Date());
   const [bookPageCount, setBookPageCount] = useState(1);
   const [bookDescription, setBookDescription] = useState("");
-  const [bookType, setBookType] = useState({});
-  const [files, setFiles] = useState([]);
-  const [bookFile, setBookFile] = useState([]);
+  const [bookType, setBookType] = useState({value: "", label: ""});
+  const [files, setFiles] = useState<any[]>([]);
+  const [bookFile, setBookFile] = useState<any[]>([]);
   const [bookPublic, setBookPublic] = useState(false);
 
   const params = useParams();
@@ -52,18 +55,18 @@ function BookOverview() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/books/${params?.id}`, {})
-      .then((res) => {
+      .get(`/books/${params?.id}`, {})
+      .then((res: any) => {
         const bk = res.data.book;
         setBook(res.data.book);
         setBookTitle(bk.title);
-        const selectedAuthors = bk?.author.map((at) => {
+        const selectedAuthors = bk?.author.map((at: any) => {
           return { value: at._id, label: at.name };
         });
 
         if (bk?.artist !== null && bk?.artist.length > 0) {
           console.log("IS NOT NULL");
-          const selectedArtists = bk?.artist.map((at) => {
+          const selectedArtists = bk?.artist.map((at: any) => {
             return { value: at._id, label: at.name };
           });
 
@@ -74,15 +77,15 @@ function BookOverview() {
         setBookType({ value: bk.bookType._id, label: bk.bookType.name });
         setBookPublishDate(
           new Date(bk.publishDate)
-            .toISOString("mm/dd/yyyy")
-            .toString()
-            .slice(0, 10)
+            // .toISOString("mm/dd/yyyy")
+            // .toString()
+            // .slice(0, 10)
         );
         setBookPageCount(bk.pageCount);
         setBookDescription(bk.description);
         setBookPublic(bk.public);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
   }, [location]);
@@ -93,8 +96,8 @@ function BookOverview() {
 
   const openModel = () => {
     axios
-      .get("http://localhost:5000/all", {})
-      .then((res) => {
+      .get("/all", {})
+      .then((res: any) => {
         const bkTypes = res.data.booktypes.map((bb: any) => {
           return { value: bb._id, label: bb.name };
         });
@@ -112,7 +115,7 @@ function BookOverview() {
         setVisible(true);
 
         setBookTitle(book.title);
-        const selectedAuthors = book.author.map((at) => {
+        const selectedAuthors = book.author.map((at: any) => {
           return { value: at._id, label: at.name };
         });
 
@@ -121,7 +124,7 @@ function BookOverview() {
         console.log(selectedAuthors);
 
         if (book?.artist !== null && book?.artist.length > 0) {
-          const selectedArtists = book.artist.map((at) => {
+          const selectedArtists = book.artist.map((at: any) => {
             return { value: at._id, label: at.name };
           });
 
@@ -135,16 +138,16 @@ function BookOverview() {
 
         setBookPublishDate(
           new Date(book.publishDate)
-            .toISOString("mm/dd/yyyy")
-            .toString()
-            .slice(0, 10)
+            // .toISOString("mm/dd/yyyy")
+            // .toString()
+            // .slice(0, 10)
         );
 
         setBookPageCount(book.pageCount);
         setBookDescription(book.description);
         setBookPublic(book.public);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -168,7 +171,7 @@ function BookOverview() {
 
     axios
       .put(
-        `http://localhost:5000/books/${params?.id}`,
+        `/books/${params?.id}`,
         {
           title: bookTitle,
           author: authors,
@@ -188,11 +191,11 @@ function BookOverview() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         // const bk = res.data.book;
         setBook(res.data.book);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error("onEditBook error =>", err);
       });
   };
@@ -205,15 +208,15 @@ function BookOverview() {
 
   const deleteBook = () => {
     axios
-      .delete(`http://localhost:5000/books/${book._id}`, {
+      .delete(`/books/${book._id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
+      .then(() => {
         navigate("/library");
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -294,7 +297,7 @@ function BookOverview() {
             >
               <Text aria-label="Author">
                 Author:{" "}
-                {book?.author?.map((at, i) => {
+                {book?.author?.map((at: any, i: number) => {
                   if (i >= book?.author.length - 1) {
                     return at.name;
                   } else {
@@ -305,7 +308,7 @@ function BookOverview() {
               {book?.artist ? (
                 <Text aria-label="Artist">
                   Artist:{" "}
-                  {book?.artist?.map((at, i) => {
+                  {book?.artist?.map((at: any, i: number) => {
                     if (i >= book?.artist.length - 1) {
                       return at.name;
                     } else {
@@ -345,7 +348,7 @@ function BookOverview() {
           <Select
             aria-label="Book Author"
             isMulti
-            onChange={setBookAuthor}
+            onChange={(value) => setBookAuthor([...value])}
             value={bookAuthor}
             placeholder="Authors"
             options={authors}
@@ -354,7 +357,7 @@ function BookOverview() {
           <Select
             aria-label="Book Artist"
             isMulti
-            onChange={setBookArtist}
+            onChange={(value) => setBookArtist([...value])}
             value={bookArtist}
             placeholder="Artists"
             options={artists}
@@ -364,7 +367,7 @@ function BookOverview() {
             aria-label="Book Type"
             name="bookType"
             isSearchable={true}
-            onChange={setBookType}
+            // onChange={(value) => setBookType([...value])}
             value={bookType}
             placeholder="Book Type"
             options={bookTypes}
@@ -373,15 +376,15 @@ function BookOverview() {
             aria-label="Published Date"
             type="date"
             placeholder="Published Date"
-            value={bookPublishDate}
-            onChange={(e) => setBookPublishDate(e.target.value)}
+            value={bookPublishDate.toDateString()}
+            onChange={(e) => setBookPublishDate(new Date(e.target.value))}
           />
           <Input
             aria-label="Page Count"
             type="number"
             placeholder="Page Count"
             value={bookPageCount}
-            onChange={(e) => setBookPageCount(e.target.value)}
+            onChange={(e) => setBookPageCount(Number(e.target.value))}
           />
           <Textarea
             aria-label="Book Description"
@@ -415,7 +418,7 @@ function BookOverview() {
           <Text aria-label="Is a public book?">Public?</Text>
           <Switch
             checked={bookPublic}
-            onChange={(e) => setBookPublic(e.target.checked)}
+            onChange={(e: any) => setBookPublic(e.target.checked)}
           />
         </Modal.Body>
         <Modal.Footer

@@ -1,3 +1,4 @@
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -8,17 +9,17 @@ import App from "./App.tsx";
 import Authors from "./pages/Authors/Authors.tsx";
 import Library from "./pages/Books/Library.tsx";
 import "./index.css";
-import AddBooks from "./pages/Books/AddBook.tsx";
-import AddAuthor from "./pages/Authors/AddAuthor.tsx";
+// import AddBooks from "./pages/Books/AddBook.tsx";
+// import AddAuthor from "./pages/Authors/AddAuthor.tsx";
 import BookOverview from "./pages/Books/BookOverview.tsx";
 import Settings from "./pages/Settings/Settings.tsx";
 import BooksProvider from "./context/BooksProvider.tsx";
 import BookView from "./pages/Books/BookView.tsx";
 
-const darkTheme = createTheme({
-  type: "dark",
-  theme: {},
-});
+// const darkTheme = createTheme({
+//   type: "dark",
+//   theme: {},
+// });
 
 const lightTheme = createTheme({
   type: "light",

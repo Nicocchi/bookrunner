@@ -1,49 +1,52 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import axios from "../../utils/axios.config"
 import { Text, Card, Button, Input } from "@nextui-org/react";
 import { Close, Pencil, PeopleDeleteOne, Save } from "@icon-park/react";
 
 function Settings() {
-  const [authors, setAuthors] = useState([]);
-  const [bookTypes, setBookTypes] = useState([]);
-  const [artists, setArtists] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [genres, setGenres] = useState([]);
+  const [authors, setAuthors] = useState<any[]>([]);
+  const [bookTypes, setBookTypes] = useState<any[]>([]);
+  const [artists, setArtists] = useState<any[]>([]);
+  const [tags, setTags] = useState<any[]>([]);
+  const [genres, setGenres] = useState<any[]>([]);
   const [authorName, setAuthorName] = useState("");
   const [artistName, setArtistName] = useState("");
   const [tagName, setTagName] = useState("");
   const [genreName, setGenreName] = useState("");
   const [typeName, setTypeName] = useState("");
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
-  const [isEditing, setIsEditing] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   const [fieldID, setFieldID] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/all", {})
-      .then((res) => {
+      .get("/all", {})
+      .then((res: any) => {
         setAuthors(res.data.authors);
         setBookTypes(res.data.booktypes);
         setArtists(res.data.artists);
         setTags(res.data.tags);
         setGenres(res.data.genres);
 
-        setVisible(true);
+        // setVisible(true);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   }, []);
 
-  const closeHandler = () => {
-    setVisible(false);
-  };
+  // const closeHandler = () => {
+  //   setVisible(false);
+  // };
 
   const addAuthor = () => {
     axios
       .post(
-        `http://localhost:5000/authors`,
+        `/authors`,
         {
           name: authorName,
         },
@@ -53,11 +56,11 @@ function Settings() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         setAuthorName("");
         setAuthors(res.data.authors);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -65,7 +68,7 @@ function Settings() {
   const addBookType = () => {
     axios
       .post(
-        `http://localhost:5000/book-types`,
+        `/book-types`,
         {
           name: typeName,
         },
@@ -75,11 +78,11 @@ function Settings() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         setTypeName("");
         setBookTypes(res.data.bookTypes);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -87,7 +90,7 @@ function Settings() {
   const addArtist = () => {
     axios
       .post(
-        `http://localhost:5000/artists`,
+        `/artists`,
         {
           name: artistName,
         },
@@ -97,11 +100,11 @@ function Settings() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         setArtistName("");
         setArtists(res.data.artists);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -109,7 +112,7 @@ function Settings() {
   const addTag = () => {
     axios
       .post(
-        `http://localhost:5000/tags`,
+        `/tags`,
         {
           name: tagName,
         },
@@ -119,11 +122,11 @@ function Settings() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         setTagName("");
         setTags(res.data.tags);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -131,7 +134,7 @@ function Settings() {
   const addGenre = () => {
     axios
       .post(
-        `http://localhost:5000/genres`,
+        `/genres`,
         {
           name: genreName,
         },
@@ -141,16 +144,16 @@ function Settings() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         setGenreName("");
         setGenres(res.data.genres);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const edit = (id) => {
+  const edit = (id: string) => {
     setFieldID(id);
     setIsEditing(true);
   };
@@ -160,11 +163,11 @@ function Settings() {
     setIsEditing(false);
   };
 
-  const updateAuthor = (id) => {
+  const updateAuthor = (id: string) => {
     if (name !== null || name !== "") {
       axios
         .put(
-          `http://localhost:5000/authors/${id}`,
+          `/authors/${id}`,
           {
             name,
           },
@@ -174,21 +177,21 @@ function Settings() {
             },
           }
         )
-        .then((res) => {
+        .then((res: any) => {
           setAuthors(res.data.authors);
           setIsEditing(false);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(err);
         });
     }
   };
 
-  const updateBookType = (id) => {
+  const updateBookType = (id: string) => {
     if (name !== null || name !== "") {
       axios
         .put(
-          `http://localhost:5000/book-types/${id}`,
+          `/book-types/${id}`,
           {
             name,
           },
@@ -198,21 +201,21 @@ function Settings() {
             },
           }
         )
-        .then((res) => {
+        .then((res: any) => {
           setBookTypes(res.data.bookTypes);
           setIsEditing(false);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(err);
         });
     }
   };
 
-  const updateArtist = (id) => {
+  const updateArtist = (id: string) => {
     if (name !== null || name !== "") {
       axios
         .put(
-          `http://localhost:5000/artists/${id}`,
+          `/artists/${id}`,
           {
             name,
           },
@@ -222,21 +225,21 @@ function Settings() {
             },
           }
         )
-        .then((res) => {
+        .then((res: any) => {
           setArtists(res.data.artists);
           setIsEditing(false);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(err);
         });
     }
   };
 
-  const updateTag = (id) => {
+  const updateTag = (id: string) => {
     if (name !== null || name !== "") {
       axios
         .put(
-          `http://localhost:5000/tags/${id}`,
+          `/tags/${id}`,
           {
             name,
           },
@@ -246,21 +249,21 @@ function Settings() {
             },
           }
         )
-        .then((res) => {
+        .then((res: any) => {
           setTags(res.data.tags);
           setIsEditing(false);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(err);
         });
     }
   };
 
-  const updateGenre = (id) => {
+  const updateGenre = (id: string) => {
     if (name !== null || name !== "") {
       axios
         .put(
-          `http://localhost:5000/genres/${id}`,
+          `/genres/${id}`,
           {
             name,
           },
@@ -270,92 +273,92 @@ function Settings() {
             },
           }
         )
-        .then((res) => {
+        .then((res: any) => {
           setGenres(res.data.genres);
           setIsEditing(false);
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(err);
         });
     }
   };
 
-  const deleteBookType = (id) => {
+  const deleteBookType = (id: string) => {
     axios
-      .delete(`http://localhost:5000/book-types/${id}`, {
+      .delete(`/book-types/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
+      .then((res: any) => {
         setBookTypes(res.data.bookTypes);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const deleteAuthor = (id) => {
+  const deleteAuthor = (id: string) => {
     axios
-      .delete(`http://localhost:5000/authors/${id}`, {
+      .delete(`/authors/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
+      .then((res: any) => {
         setAuthors(res.data.authors);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const deleteArtist = (id) => {
+  const deleteArtist = (id: string) => {
     axios
-      .delete(`http://localhost:5000/artists/${id}`, {
+      .delete(`/artists/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
+      .then((res: any) => {
         setArtists(res.data.artists);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const deleteTag = (id) => {
+  const deleteTag = (id: string) => {
     axios
-      .delete(`http://localhost:5000/tags/${id}`, {
+      .delete(`/tags/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
+      .then((res: any) => {
         setTags(res.data.tags);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const deleteGenre = (id) => {
+  const deleteGenre = (id: string) => {
     axios
-      .delete(`http://localhost:5000/genres/${id}`, {
+      .delete(`/genres/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
+      .then((res: any) => {
         setGenres(res.data.genres);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const onKeyPress = (e, type) => {
+  const onKeyPress = (e: any, type: any) => {
     if (e.key === "Enter") {
       switch (type) {
         case "tag":

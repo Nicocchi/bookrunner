@@ -9,13 +9,15 @@ import {
 import { useEffect, useState } from "react";
 import { Star } from "@icon-park/react";
 import SearchBar from "./SearchBar/SearchBar";
-import axios from "axios";
+// import axios from "axios";
 
 const Navbar = () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [activePage, setActivePage] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const [searchBefore, setSearchBefore] = useState("");
-  const [searchAfter, setSearchAfter] = useState("");
+  // const [searchBefore, setSearchBefore] = useState("");
+  // const [searchAfter, setSearchAfter] = useState("");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,13 +26,13 @@ const Navbar = () => {
     setActivePage(location.pathname);
   }, [location]);
 
-  const onDropdownEvent = (key) => {
+  const onDropdownEvent = (key: any) => {
     if (key.actionKey === "settings") {
       navigate("/settings");
     }
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = () => {
     // e.preventDefault();
     navigate(`library?title=${searchValue}`)
   };

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Image, Text, Card, Col, Row, Button } from "@nextui-org/react";
+import { Text, Card, Col, Row, Button } from "@nextui-org/react";
 import "./App.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Bookshelf } from "@icon-park/react";
 import { BookOpen } from "@icon-park/react";
 
 function App() {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<any[]>([]);
 
   const navigate = useNavigate();
 

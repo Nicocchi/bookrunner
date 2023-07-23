@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import axios from "../../utils/axios.config"
 
 function Authors() {
-  const [authors, setAuthors] = useState([]);
+  const [authors, setAuthors] = useState<any[]>([]);
   const [newName, setNewName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [authorID, setAuthorID] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/authors", {})
-      .then((res) => {
+      .get("/authors", {})
+      .then((res: any) => {
         setAuthors(res.data.authors);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       })
       .finally(() => {
@@ -21,7 +24,7 @@ function Authors() {
       });
   }, []);
 
-  const editAuthor = (id) => {
+  const editAuthor = (id: string) => {
     if (isEditing) {
         setAuthorID(id);
     } else {
@@ -30,11 +33,11 @@ function Authors() {
     setIsEditing(!isEditing);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
     axios
       .put(
-        `http://localhost:5000/authors/${authorID}`,
+        `/authors/${authorID}`,
         {
           name: newName,
         },
@@ -44,27 +47,27 @@ function Authors() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         console.log(res.data);
         setNewName("");
         setIsEditing(false);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
 
-  const deleteAuthor = (e) => {
+  const deleteAuthor = (e: any) => {
     axios
-      .delete(`http://localhost:5000/authors/${e}`, {
+      .delete(`/authors/${e}`, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
+      .then((res: any) => {
         console.log(res.data);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };

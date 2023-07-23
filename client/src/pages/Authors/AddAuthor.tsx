@@ -1,23 +1,26 @@
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import axios from "../../utils/axios.config"
 
 function AddAuthor() {
   const [name, setName] = useState("");
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/authors", {
+      .post(`/authors`, {
         name,
       }, {
         headers: {
             'Content-Type': 'application/json'
         }
       })
-      .then((res) => {
+      .then((res: any) => {
         console.log(res.data);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };

@@ -1,8 +1,8 @@
 import { createContext, useState } from 'react';
 
-export const booksContext = createContext();
+export const booksContext = createContext<any>(null);
 
-const BooksProvider = (props) => {
+const BooksProvider = (props: any) => {
     const [books, setBooks] = useState();
 
     return (
