@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 // import axios from "axios";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import axios from "../../utils/axios.config"
+import axios from "../../utils/axios.config";
 import { Text, Card, Button, Input } from "@nextui-org/react";
 import { Close, Pencil, PeopleDeleteOne, Save } from "@icon-park/react";
+import getAllDb from "../../api/common";
 
 function Settings() {
   const [authors, setAuthors] = useState<any[]>([]);
@@ -21,22 +22,34 @@ function Settings() {
   const [name, setName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [fieldID, setFieldID] = useState("");
+  const [isStaging, setIsStaging] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("/all", {})
-      .then((res: any) => {
+    if (import.meta.env.VITE_APP_MODE === "staging") {
+      setIsStaging(true);
+      getAllDb().then((res: any) => {
         setAuthors(res.data.authors);
-        setBookTypes(res.data.booktypes);
+        setBookTypes(res.data.formats);
         setArtists(res.data.artists);
         setTags(res.data.tags);
         setGenres(res.data.genres);
-
-        // setVisible(true);
-      })
-      .catch((err: any) => {
-        console.error(err);
       });
+    } else {
+      axios
+        .get("/all", {})
+        .then((res: any) => {
+          setAuthors(res.data.authors);
+          setBookTypes(res.data.booktypes);
+          setArtists(res.data.artists);
+          setTags(res.data.tags);
+          setGenres(res.data.genres);
+
+          // setVisible(true);
+        })
+        .catch((err: any) => {
+          console.error(err);
+        });
+    }
   }, []);
 
   // const closeHandler = () => {
@@ -393,7 +406,7 @@ function Settings() {
           gap: 10,
         }}
       >
-          {/** Authors */}
+        {/** Authors */}
         <div>
           <div
             style={{
@@ -410,87 +423,101 @@ function Settings() {
                 placeholder="Name"
                 onChange={(e) => setAuthorName(e.target.value)}
                 onKeyDown={(e) => onKeyPress(e, "author")}
+                disabled={isStaging}
               />
-              <Button onPress={addAuthor} auto>
+              <Button onPress={addAuthor} auto disabled={isStaging}>
                 Add
               </Button>
             </div>
           </div>
           {/** Authors Map */}
-          <div style={{display: "flex", flexDirection: "column", overflowY: "auto", height: "640px", padding: "0px 10px"}}>
-          {authors.map((author, i) => (
-            <div key={i} style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-              <Card css={{ mw: "350px" }} isHoverable variant="bordered">
-                <Card.Body
-                  css={{
-                    display: "flex",
-                    gap: 10,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: 332,
-                  }}
-                >
-                  {isEditing && fieldID === author?._id ? (
-                    <Input
-                      aria-label="Author Name"
-                      placeholder="Name"
-                      onChange={(e) => setName(e.target.value)}
-                      initialValue={author?.name}
-                    />
-                  ) : (
-                    <Text>{author?.name}</Text>
-                  )}
-                  <div style={{ display: "flex", gap: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              overflowY: "auto",
+              height: "640px",
+              padding: "0px 10px",
+            }}
+          >
+            {authors.map((author, i) => (
+              <div
+                key={i}
+                style={{ display: "flex", gap: 10, marginBottom: 20 }}
+              >
+                <Card css={{ mw: "350px" }} isHoverable variant="bordered">
+                  <Card.Body
+                    css={{
+                      display: "flex",
+                      gap: 10,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: 332,
+                    }}
+                  >
                     {isEditing && fieldID === author?._id ? (
-                      <Button
-                        auto
-                        onPress={() => cancelEdit()}
-                        icon={<Close size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#0073f0",
-                        }}
+                      <Input
+                        aria-label="Author Name"
+                        placeholder="Name"
+                        onChange={(e) => setName(e.target.value)}
+                        initialValue={author?.name}
                       />
                     ) : (
-                      <Button
-                        auto
-                        onPress={() => edit(author?._id)}
-                        icon={<Pencil size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#0073f0",
-                        }}
-                      />
+                      <Text>{author?.name}</Text>
                     )}
-                    {isEditing && fieldID === author?._id ? (
-                      <Button
-                        auto
-                        color="success"
-                        onPress={() => updateAuthor(author?._id)}
-                        icon={<Save size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#00c96a",
-                        }}
-                      />
-                    ) : (
-                      <Button
-                        color="error"
-                        auto
-                        onPress={() => deleteAuthor(author?._id)}
-                        icon={<PeopleDeleteOne size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#fd1462",
-                        }}
-                      />
-                    )}
-                  </div>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
+                    <div style={{ display: "flex", gap: 10 }}>
+                      {isEditing && fieldID === author?._id ? (
+                        <Button
+                          auto
+                          onPress={() => cancelEdit()}
+                          icon={<Close size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#0073f0",
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          disabled={isStaging}
+                          auto
+                          onPress={() => edit(author?._id)}
+                          icon={<Pencil size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#0073f0",
+                          }}
+                        />
+                      )}
+                      {isEditing && fieldID === author?._id ? (
+                        <Button
+                          auto
+                          color="success"
+                          onPress={() => updateAuthor(author?._id)}
+                          icon={<Save size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#00c96a",
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          disabled={isStaging}
+                          color="error"
+                          auto
+                          onPress={() => deleteAuthor(author?._id)}
+                          icon={<PeopleDeleteOne size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#fd1462",
+                          }}
+                        />
+                      )}
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
           </div>
         </div>
         {/** Formats */}
@@ -510,87 +537,101 @@ function Settings() {
                 placeholder="Name"
                 onChange={(e) => setTypeName(e.target.value)}
                 onKeyDown={(e) => onKeyPress(e, "format")}
+                disabled={isStaging}
               />
-              <Button onPress={addBookType} auto>
+              <Button onPress={addBookType} auto disabled={isStaging}>
                 Add
               </Button>
             </div>
           </div>
           {/** Format Map*/}
-          <div style={{display: "flex", flexDirection: "column", overflowY: "auto", height: "640px", padding: "0px 10px"}}>
-          {bookTypes.map((bookType, i) => (
-            <div key={i} style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-              <Card css={{ mw: "350px" }} isHoverable variant="bordered">
-                <Card.Body
-                  css={{
-                    display: "flex",
-                    gap: 10,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: 332,
-                  }}
-                >
-                  {isEditing && fieldID === bookType?._id ? (
-                    <Input
-                      aria-label="Format Name"
-                      placeholder="Name"
-                      onChange={(e) => setName(e.target.value)}
-                      initialValue={bookType?.name}
-                    />
-                  ) : (
-                    <Text>{bookType?.name}</Text>
-                  )}
-                  <div style={{ display: "flex", gap: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              overflowY: "auto",
+              height: "640px",
+              padding: "0px 10px",
+            }}
+          >
+            {bookTypes.map((bookType, i) => (
+              <div
+                key={i}
+                style={{ display: "flex", gap: 10, marginBottom: 20 }}
+              >
+                <Card css={{ mw: "350px" }} isHoverable variant="bordered">
+                  <Card.Body
+                    css={{
+                      display: "flex",
+                      gap: 10,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: 332,
+                    }}
+                  >
                     {isEditing && fieldID === bookType?._id ? (
-                      <Button
-                        auto
-                        onPress={() => cancelEdit()}
-                        icon={<Close size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#0073f0",
-                        }}
+                      <Input
+                        aria-label="Format Name"
+                        placeholder="Name"
+                        onChange={(e) => setName(e.target.value)}
+                        initialValue={bookType?.name}
                       />
                     ) : (
-                      <Button
-                        auto
-                        onPress={() => edit(bookType?._id)}
-                        icon={<Pencil size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#0073f0",
-                        }}
-                      />
+                      <Text>{bookType?.name}</Text>
                     )}
-                    {isEditing && fieldID === bookType?._id ? (
-                      <Button
-                        auto
-                        color="success"
-                        onPress={() => updateBookType(bookType?._id)}
-                        icon={<Save size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#00c96a",
-                        }}
-                      />
-                    ) : (
-                      <Button
-                        color="error"
-                        auto
-                        onPress={() => deleteBookType(bookType?._id)}
-                        icon={<PeopleDeleteOne size="1.3em" />}
-                        css={{
-                          backgroundColor: "transparent",
-                          color: "#fd1462",
-                        }}
-                      />
-                    )}
-                  </div>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
+                    <div style={{ display: "flex", gap: 10 }}>
+                      {isEditing && fieldID === bookType?._id ? (
+                        <Button
+                          auto
+                          onPress={() => cancelEdit()}
+                          icon={<Close size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#0073f0",
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          disabled={isStaging}
+                          auto
+                          onPress={() => edit(bookType?._id)}
+                          icon={<Pencil size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#0073f0",
+                          }}
+                        />
+                      )}
+                      {isEditing && fieldID === bookType?._id ? (
+                        <Button
+                          auto
+                          color="success"
+                          onPress={() => updateBookType(bookType?._id)}
+                          icon={<Save size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#00c96a",
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          disabled={isStaging}
+                          color="error"
+                          auto
+                          onPress={() => deleteBookType(bookType?._id)}
+                          icon={<PeopleDeleteOne size="1.3em" />}
+                          css={{
+                            backgroundColor: "transparent",
+                            color: "#fd1462",
+                          }}
+                        />
+                      )}
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
           </div>
         </div>
         {/** Artists */}
@@ -610,8 +651,9 @@ function Settings() {
                 placeholder="Name"
                 onChange={(e) => setArtistName(e.target.value)}
                 onKeyDown={(e) => onKeyPress(e, "artist")}
+                disabled={isStaging}
               />
-              <Button onPress={addArtist} auto>
+              <Button onPress={addArtist} auto disabled={isStaging}>
                 Add
               </Button>
             </div>
@@ -665,6 +707,7 @@ function Settings() {
                         />
                       ) : (
                         <Button
+                          disabled={isStaging}
                           auto
                           onPress={() => edit(artist?._id)}
                           icon={<Pencil size="1.3em" />}
@@ -687,6 +730,7 @@ function Settings() {
                         />
                       ) : (
                         <Button
+                          disabled={isStaging}
                           color="error"
                           auto
                           onPress={() => deleteArtist(artist?._id)}
@@ -721,8 +765,9 @@ function Settings() {
                 value={tagName}
                 onChange={(e) => setTagName(e.target.value)}
                 onKeyDown={(e) => onKeyPress(e, "tag")}
+                disabled={isStaging}
               />
-              <Button onPress={addTag} auto>
+              <Button onPress={addTag} auto disabled={isStaging}>
                 Add
               </Button>
             </div>
@@ -776,6 +821,7 @@ function Settings() {
                         />
                       ) : (
                         <Button
+                          disabled={isStaging}
                           auto
                           onPress={() => edit(tag?._id)}
                           icon={<Pencil size="1.3em" />}
@@ -798,6 +844,7 @@ function Settings() {
                         />
                       ) : (
                         <Button
+                          disabled={isStaging}
                           color="error"
                           auto
                           onPress={() => deleteTag(tag?._id)}
@@ -832,8 +879,9 @@ function Settings() {
                 value={genreName}
                 onChange={(e) => setGenreName(e.target.value)}
                 onKeyDown={(e) => onKeyPress(e, "genre")}
+                disabled={isStaging}
               />
-              <Button onPress={addGenre} auto>
+              <Button onPress={addGenre} auto disabled={isStaging}>
                 Add
               </Button>
             </div>
@@ -887,6 +935,7 @@ function Settings() {
                         />
                       ) : (
                         <Button
+                          disabled={isStaging}
                           auto
                           onPress={() => edit(genre?._id)}
                           icon={<Pencil size="1.3em" />}
@@ -909,6 +958,7 @@ function Settings() {
                         />
                       ) : (
                         <Button
+                          disabled={isStaging}
                           color="error"
                           auto
                           onPress={() => deleteGenre(genre?._id)}

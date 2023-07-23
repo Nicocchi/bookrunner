@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import axios from "../../utils/axios.config"
+import axios from "../../utils/axios.config";
 import {
   Text,
   Card,
@@ -27,6 +27,8 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import getAllDb from "../../api/common";
+import {getAllBooks} from "../../api/books/books";
 
 // Register the plugins
 registerPlugin(
@@ -85,7 +87,14 @@ const BookDetailsCard = ({
   format,
   description,
   ...props
-}: {css: any, onClick: any, title: any, author: any, format: any, description: any}) => {
+}: {
+  css: any;
+  onClick: any;
+  title: any;
+  author: any;
+  format: any;
+  description: any;
+}) => {
   // const [following, setFollowing] = React.useState(false);
 
   return (
@@ -106,14 +115,17 @@ const BookDetailsCard = ({
               <Text b size={17}>
                 {title}
               </Text>
-              <div style={{ display: "flex", gap: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {author.map((a: any, i: number) => (
-                  <Text
-                  key={i}
-                    size={14}
-                    color="#ec4f85"
-                    b
-                  >
+                  <Text key={i} size={14} color="#ec4f85" b>
                     {a?.name}
                   </Text>
                 ))}
@@ -139,11 +151,7 @@ const BookDetailsCard = ({
             textOverflow: "ellipsis",
           }}
         >
-          <Text
-            size={14}
-            css={{ mt: "$1" }}
-            color="#888888"
-          >
+          <Text size={14} css={{ mt: "$1" }} color="#888888">
             {description}
           </Text>
         </Grid>
@@ -152,10 +160,10 @@ const BookDetailsCard = ({
       <Grid.Container
         justify="flex-start"
         alignContent="center"
-        style={{paddingTop: "10px"}}
+        style={{ paddingTop: "10px" }}
       >
-        <Badge css={{backgroundColor: "#ec4f85"}}>Detective</Badge>
-        <Badge css={{backgroundColor: "#ec4f85"}}>Comedy</Badge>
+        <Badge css={{ backgroundColor: "#ec4f85" }}>Detective</Badge>
+        <Badge css={{ backgroundColor: "#ec4f85" }}>Comedy</Badge>
       </Grid.Container>
     </Grid.Container>
   );
@@ -175,10 +183,11 @@ function Library() {
   const [bookPublishDate, setBookPublishDate] = useState(new Date());
   const [bookPageCount, setBookPageCount] = useState(1);
   const [bookDescription, setBookDescription] = useState("");
-  const [bookType, setBookType] = useState({value: ""});
+  const [bookType, setBookType] = useState({ value: "" });
   const [files, setFiles] = useState<any[]>([]);
   const [bookFile, setBookFile] = useState<any[]>([]);
   const [bookPublic, setBookPublic] = useState(false);
+  const [isStaging, setIsStaging] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -189,45 +198,71 @@ function Library() {
         .get(`/books${location.search}`, {})
         .then((res: any) => {
           setBooks(res.data.books);
-          setBookType({value: ""});
+          setBookType({ value: "" });
         })
         .catch((err: any) => {
           console.log(err);
         });
     } else {
-      axios
-        .get("http://localhost:5000/books", {})
-        .then((res) => {
-          axios
-            .get("http://localhost:5000/all", {})
-            .then((allRes) => {
-              const bkTypes = allRes.data.booktypes.map((bb: any) => {
-                return { value: bb._id, label: bb.name };
-              });
-              const auths = allRes.data.authors.map((aa: any) => {
-                return { value: aa._id, label: aa.name };
-              });
-              const arts = allRes.data.artists.map((aa: any) => {
-                return { value: aa._id, label: aa.name };
-              });
-              const gnrs = allRes.data.genres.map((aa: any) => {
-                return { value: aa._id, label: aa.name };
-              });
-
-              setAuthors(auths);
-              setFormats(bkTypes);
-              setArtists(arts);
-              setGenres(gnrs);
-              setBooks(res.data.books);
-            })
-            .catch((err) => {
-              console.error(err);
+      if (import.meta.env.VITE_APP_MODE === "staging") {
+        setIsStaging(true);
+        getAllBooks().then((res: any) => {
+          getAllDb().then((allRes: any) => {
+            const bkTypes = allRes.data.formats.map((bb: any) => {
+              return { value: bb._id, label: bb.name };
             });
-          // setBooks(res.data.books);
+            const auths = allRes.data.authors.map((aa: any) => {
+              return { value: aa._id, label: aa.name };
+            });
+            const arts = allRes.data.artists.map((aa: any) => {
+              return { value: aa._id, label: aa.name };
+            });
+            const gnrs = allRes.data.genres.map((aa: any) => {
+              return { value: aa._id, label: aa.name };
+            });
+  
+            setAuthors(auths);
+            setFormats(bkTypes);
+            setArtists(arts);
+            setGenres(gnrs);
+            setBooks(res.data.books);
+          });
         })
-        .catch((err) => {
-          console.log(err);
-        });
+      } else {
+        axios
+          .get("http://localhost:5000/books", {})
+          .then((res: any) => {
+            axios
+              .get("http://localhost:5000/all", {})
+              .then((allRes: any) => {
+                const bkTypes = allRes.data.booktypes.map((bb: any) => {
+                  return { value: bb._id, label: bb.name };
+                });
+                const auths = allRes.data.authors.map((aa: any) => {
+                  return { value: aa._id, label: aa.name };
+                });
+                const arts = allRes.data.artists.map((aa: any) => {
+                  return { value: aa._id, label: aa.name };
+                });
+                const gnrs = allRes.data.genres.map((aa: any) => {
+                  return { value: aa._id, label: aa.name };
+                });
+
+                setAuthors(auths);
+                setFormats(bkTypes);
+                setArtists(arts);
+                setGenres(gnrs);
+                setBooks(res.data.books);
+              })
+              .catch((err: any) => {
+                console.error(err);
+              });
+            // setBooks(res.data.books);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      }
     }
   }, [location]);
 
@@ -239,7 +274,7 @@ function Library() {
   const openModel = () => {
     axios
       .get("http://localhost:5000/all", {})
-      .then((res) => {
+      .then((res: any) => {
         const bkTypes = res.data.booktypes.map((bb: any) => {
           return { value: bb._id, label: bb.name };
         });
@@ -256,7 +291,7 @@ function Library() {
 
         setVisible(true);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
       });
   };
@@ -299,10 +334,10 @@ function Library() {
           },
         }
       )
-      .then((res) => {
+      .then((res: any) => {
         setBooks(res.data.books);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error("onAddBook error =>", err);
       });
   };
@@ -326,8 +361,21 @@ function Library() {
           width: "100%",
         }}
       >
-        <div style={{ display: "flex", flexFlow: "wrap", justifyContent: "center", gap: 20, paddingBottom: "20px" }}>
-          <Input aria-label="Search" shadow={false} placeholder="Search" width="170px" />
+        <div
+          style={{
+            display: "flex",
+            flexFlow: "wrap",
+            justifyContent: "center",
+            gap: 20,
+            paddingBottom: "20px",
+          }}
+        >
+          <Input
+            aria-label="Search"
+            shadow={false}
+            placeholder="Search"
+            width="170px"
+          />
           <Select
             aria-label="Authors"
             styles={selectStyle}
@@ -377,7 +425,7 @@ function Library() {
             placeholder="Status"
             // options={authors}
           />
-          <Button onPress={openModel} color="secondary" auto>
+          <Button onPress={openModel} color="secondary" auto disabled={isStaging}>
             Add Book
           </Button>
         </div>
@@ -394,13 +442,20 @@ function Library() {
               placement="rightStart"
               leaveDelay={0.05}
               offset={30}
-              content={<BookDetailsCard
-                title={b?.title}
-                author={b?.author}
-                description={b?.description}
-                format={b?.bookType?.name}
-                css=""
-                onClick={() => { } } />} css={undefined} color={undefined} contentColor={undefined}            >
+              content={
+                <BookDetailsCard
+                  title={b?.title}
+                  author={b?.author}
+                  description={b?.description}
+                  format={b?.bookType?.name}
+                  css=""
+                  onClick={() => {}}
+                />
+              }
+              css={undefined}
+              color={undefined}
+              contentColor={undefined}
+            >
               <div style={{ width: "185px" }}>
                 <Card
                   key={i}
@@ -422,7 +477,7 @@ function Library() {
                     />
                   </Card.Body>
                 </Card>
-                <Text h6 color="#000" size={12} css={{paddingTop: "10px"}}>
+                <Text h6 color="#000" size={12} css={{ paddingTop: "10px" }}>
                   {b?.title}
                 </Text>
               </div>

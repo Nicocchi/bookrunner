@@ -24,6 +24,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import {getBookByID} from "../../api/books/books";
 
 // Register the plugins
 registerPlugin(
@@ -49,12 +50,22 @@ function BookOverview() {
   const [files, setFiles] = useState<any[]>([]);
   const [bookFile, setBookFile] = useState<any[]>([]);
   const [bookPublic, setBookPublic] = useState(false);
+  const [isStaging, setIsStaging] = useState(false);
 
   const params = useParams();
   const navigate = useNavigate();
+  const base_url = isStaging ? "" : "http://localhost:5000/uploads/bookCovers"
 
   useEffect(() => {
-    axios
+    if (import.meta.env.VITE_APP_MODE === "staging") {
+      setIsStaging(true);
+      getBookByID(params?.id).then((res: any) => {
+        const bk = res.data.book;
+        setBook(res.data.book);
+        setBookTitle(bk.title);
+      })
+    } else {
+      axios
       .get(`/books/${params?.id}`, {})
       .then((res: any) => {
         const bk = res.data.book;
@@ -88,6 +99,8 @@ function BookOverview() {
       .catch((err: any) => {
         console.log(err);
       });
+    }
+    
   }, [location]);
 
   const closeHandler = () => {
@@ -254,7 +267,7 @@ function BookOverview() {
             }}
           >
             <Image
-              src={`http://localhost:5000/uploads/bookCovers/${book?.coverImage}`}
+              src={`${base_url}/${book?.coverImage}`}
               width={240}
               height={341}
               objectFit="cover"
@@ -266,6 +279,7 @@ function BookOverview() {
             <Spacer y={0.5} />
             <div style={{ display: "flex", gap: 10 }}>
               <Button
+                disabled={isStaging}
                 onPress={openModel}
                 style={{ backgroundColor: "#fff", paddingTop: "14px" }}
                 size="sm"

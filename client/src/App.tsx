@@ -5,30 +5,40 @@ import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { Bookshelf } from "@icon-park/react";
 import { BookOpen } from "@icon-park/react";
+import { getAllBooks } from "./api/books/books";
 
 function App() {
   const [books, setBooks] = useState<any[]>([]);
+  const [isStaging, setIsStaging] = useState(false);
 
   const navigate = useNavigate();
+  const base_url = isStaging ? "" : "http://localhost:5000/uploads/bookCovers"
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/books", {})
-      .then((res) => {
+    if (import.meta.env.VITE_APP_MODE === "staging") {
+      setIsStaging(true);
+      getAllBooks().then((res: any) => {
         setBooks(res.data.books);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        // always executed/
       });
+    } else {
+      axios
+        .get("http://localhost:5000/books", {})
+        .then((res) => {
+          setBooks(res.data.books);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          // always executed/
+        });
+    }
   }, [books]);
 
   const viewBook = (id: string, mimetype: string) => {
     localStorage.setItem("contentId", id);
     localStorage.setItem("mimetype", mimetype);
-    window.open(`/book/viewer`, '_blank');
+    window.open(`/book/viewer`, "_blank");
   };
 
   return (
@@ -41,9 +51,9 @@ function App() {
           gap: 10,
         }}
       >
-        <div style={{display: "flex", gap: 10, alignItems: "center"}}>
-        <Bookshelf size="24px" />
-        <Text h3>Recently Added Books</Text>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <Bookshelf size="24px" />
+          <Text h3>Recently Added Books</Text>
         </div>
         <div style={{ display: "flex", gap: 20, flexFlow: "wrap" }}>
           {books.map((b, i) => (
@@ -53,11 +63,11 @@ function App() {
               ></Card.Header>
               <Card.Body css={{ p: 0 }}>
                 <Card.Image
-                  src={`http://localhost:5000/uploads/bookCovers/${b?.coverImage}`}
+                  src={`${base_url}/${b?.coverImage}`}
                   width="100%"
                   height="100%"
                   objectFit="cover"
-                  alt="Card example background"
+                  alt="book cover"
                 />
               </Card.Body>
               <Card.Footer
@@ -72,7 +82,7 @@ function App() {
                 }}
               >
                 <Row>
-                <Col style={{maxHeight: 20}}>
+                  <Col style={{ maxHeight: 20 }}>
                     <Text h6 color="#000" size={12}>
                       {b?.title}
                     </Text>
@@ -82,7 +92,13 @@ function App() {
                   </Col>
                   <Col>
                     <Row justify="flex-end">
-                      <Button flat auto rounded onPress={() => navigate(`/book/${b?._id}`)} color="secondary">
+                      <Button
+                        flat
+                        auto
+                        rounded
+                        onPress={() => navigate(`/book/${b?._id}`)}
+                        color="secondary"
+                      >
                         <Text
                           css={{ color: "inherit" }}
                           size={12}
@@ -98,7 +114,10 @@ function App() {
                         rounded
                         onPress={() => viewBook(b?.file, b?.mimetype)}
                         // color="secondary"
-                        style={{ paddingTop: "15px", backgroundColor: "transparent",  }}
+                        style={{
+                          paddingTop: "15px",
+                          backgroundColor: "transparent",
+                        }}
                         icon={
                           <BookOpen theme="outline" size="24" fill="#333" />
                         }

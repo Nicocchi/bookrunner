@@ -16,6 +16,7 @@ const Navbar = () => {
   // @ts-ignore
   const [activePage, setActivePage] = useState("");
   const [searchValue, setSearchValue] = useState("");
+  const [isStaging, setIsStaging] = useState(false);
   // const [searchBefore, setSearchBefore] = useState("");
   // const [searchAfter, setSearchAfter] = useState("");
 
@@ -24,6 +25,9 @@ const Navbar = () => {
 
   useEffect(() => {
     setActivePage(location.pathname);
+    if (import.meta.env.VITE_APP_MODE === "staging") {
+      setIsStaging(true);
+    }
   }, [location]);
 
   const onDropdownEvent = (key: any) => {
@@ -49,15 +53,15 @@ const Navbar = () => {
         <NavLink to="/library" end style={({ isActive }) => isActive ? {color:'#3694FF', fontWeight: "bold"} : {color: "black"}}>Library</NavLink>
       </NavigationBar.Content>
       <NavigationBar.Content>
-        <SearchBar onSubmit={onSubmit} value={searchValue} setValue={setSearchValue} />
-        <NavigationBar.Link color="inherit" href="#">
+        <SearchBar onSubmit={onSubmit} value={searchValue} setValue={setSearchValue} disabled={isStaging} />
+        {!isStaging ? <><NavigationBar.Link color="inherit" href="#">
           Login
         </NavigationBar.Link>
         <NavigationBar.Item>
           <Button auto flat as={NavLink} href="#">
             Sign Up
           </Button>
-        </NavigationBar.Item>
+        </NavigationBar.Item></> : null}
         <Dropdown placement="bottom-right">
           <NavigationBar.Item>
             <Dropdown.Trigger>

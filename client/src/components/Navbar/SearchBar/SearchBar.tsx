@@ -1,6 +1,6 @@
 import { Input, Button } from "@nextui-org/react";
 
-const SearchBar = ({ onSubmit, value, setValue }: {onSubmit: any, value: any, setValue: any}) => {
+const SearchBar = ({ onSubmit, value, setValue, disabled }: {onSubmit: any, value: any, setValue: any, disabled: boolean}) => {
   return (
     <form
       onSubmit={onSubmit}
@@ -12,8 +12,9 @@ const SearchBar = ({ onSubmit, value, setValue }: {onSubmit: any, value: any, se
           value={value}
           placeholder="Search Title"
           onChange={(e) => setValue(e.target.value)}
+          disabled={disabled}
         />
-        <Button onPress={(e: any) => onSubmit(e)} auto>
+        <Button onPress={(e: any) => onSubmit(e)} auto disabled={disabled}>
           Search
         </Button>
       </div>
