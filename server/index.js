@@ -14,6 +14,7 @@ const bookRouter = require("./routes/books");
 const bookTypesRouter = require("./routes/bookTypes");
 const artistRouter = require("./routes/artists");
 const tagRouter = require("./routes/tags");
+const genreRouter = require("./routes/genres");
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,5 +32,6 @@ app.use("/books", bookRouter);
 app.use("/book-types", bookTypesRouter);
 app.use("/artists", artistRouter);
 app.use("/tags", tagRouter);
+app.use("/genres", genreRouter);
 
 app.listen(process.env.PORT || 5000);

@@ -106,8 +106,9 @@ const BookDetailsCard = ({
                 {title}
               </Text>
               <div style={{ display: "flex", gap: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {author.map((a) => (
+                {author.map((a, i) => (
                   <Text
+                  key={i}
                     size={14}
                     color="#ec4f85"
                     b
@@ -165,9 +166,11 @@ function Library() {
   const [authors, setAuthors] = useState([]);
   const [artists, setArtists] = useState([]);
   const [formats, setFormats] = useState([]);
+  const [genres, setGenres] = useState([]);
   const [bookTitle, setBookTitle] = useState("");
   const [bookAuthor, setBookAuthor] = useState([]);
   const [bookArtist, setBookArtist] = useState([]);
+  const [bookGenre, setBookGenre] = useState([]);
   const [bookPublishDate, setBookPublishDate] = useState(new Date());
   const [bookPageCount, setBookPageCount] = useState(1);
   const [bookDescription, setBookDescription] = useState("");
@@ -205,10 +208,14 @@ function Library() {
               const arts = allRes.data.artists.map((aa: any) => {
                 return { value: aa._id, label: aa.name };
               });
+              const gnrs = allRes.data.genres.map((aa: any) => {
+                return { value: aa._id, label: aa.name };
+              });
 
               setAuthors(auths);
               setFormats(bkTypes);
               setArtists(arts);
+              setGenres(gnrs);
               setBooks(res.data.books);
             })
             .catch((err) => {
@@ -318,7 +325,7 @@ function Library() {
         }}
       >
         <div style={{ display: "flex", flexFlow: "wrap", justifyContent: "center", gap: 20, paddingBottom: "20px" }}>
-          <Input shadow={false} placeholder="Search" width="170px" />
+          <Input aria-label="Search" shadow={false} placeholder="Search" width="170px" />
           <Select
             aria-label="Authors"
             styles={selectStyle}
@@ -337,11 +344,12 @@ function Library() {
           />
           <Select
             aria-label="Genres"
+            isMulti
             styles={selectStyle}
             // onChange={setBookAuthor}
             // value={bookAuthor}
             placeholder="Genres"
-            // options={authors}
+            options={genres}
           />
           <Select
             aria-label="Year"
@@ -380,6 +388,7 @@ function Library() {
         >
           {books.map((b, i) => (
             <Tooltip
+              key={i}
               placement="rightStart"
               leaveDelay={0.05}
               offset={30}

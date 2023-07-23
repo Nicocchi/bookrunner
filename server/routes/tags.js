@@ -10,14 +10,14 @@ router.get("/", async (req, res) => {
     searchOptions.name = new RegExp(req.query.name, "i");
   }
   try {
-    const tags = await Artist.find(searchOptions);
+    const tags = await Artist.find(searchOptions).sort({name: 1}).exec();
     res.json({ tags, searchOptions: req.query });
   } catch (error) {
     res.json(error);
   }
 });
 
-// create artist
+// create tag
 router.post("/", async (req, res) => {
   const tag = new Tag({
     name: req.body.name,
@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
 
   try {
     const newTag = await tag.save();
-    const tags = await Tag.find();
+    const tags = await Tag.find().sort({name: 1}).exec();
     res.status(200).json({ tags });
   } catch (error) {
     res.status(500).json(error);
@@ -48,7 +48,7 @@ router.put("/:id", async (req, res) => {
     tag = await Tag.findById(req.params.id);
     tag.name = req.body.name;
     await tag.save();
-    const tags = await Tag.find();
+    const tags = await Tag.find().sort({name: 1}).exec();
     res.status(200).json({ tags });
   } catch (error) {
     if (tag == null) {
@@ -67,7 +67,7 @@ router.delete("/:id", async (req, res) => {
   try {
     tag = await Tag.findById(req.params.id);
     await tag.deleteOne();
-    const tags = await Tag.find();
+    const tags = await Tag.find().sort({name: 1}).exec();
     res.status(200).json({ tags, msg: "Tag removed" });
   } catch (error) {
     if (tag == null) {
