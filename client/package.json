@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "http://nicocchi.github.io/bookrunner",
+  "homepage": "https://nicocchi.github.io/bookrunner/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

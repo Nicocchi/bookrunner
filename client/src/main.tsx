@@ -58,7 +58,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+], {basename: "/bookrunner/"});
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
