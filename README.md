@@ -6,7 +6,7 @@
 </h1>
 
 <p align="center">
-  <i align="center">Easily add and read books 🚀</i>
+  <i align="center">Easily add and read books 📖</i>
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@ Running Amplication
 
 1. Clone the repository and install dependencies
 ```shell
-git clone https://github.com/Nicocchi/bookrunner.git
+git clone https://github.com/Nicocchi/bookrunner.git && cd bookrunner
 ```
 
 2. Client
