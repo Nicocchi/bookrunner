@@ -54,7 +54,7 @@ function BookOverview() {
 
   const params = useParams();
   const navigate = useNavigate();
-  const base_url = isStaging ? "https://github.com/Nicocchi/bookrunner/blob/gh-pages/images" : "http://localhost:5000/uploads/bookCovers"
+  const base_url = isStaging ? "/images" : "http://localhost:5000/uploads/bookCovers"
 
   useEffect(() => {
     if (import.meta.env.VITE_APP_MODE === "staging") {

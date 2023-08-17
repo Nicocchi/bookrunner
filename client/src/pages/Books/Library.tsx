@@ -192,7 +192,7 @@ function Library() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const base_url = isStaging ? "https://github.com/Nicocchi/bookrunner/blob/gh-pages/images" : "http://localhost:5000/uploads/bookCovers"
+  const base_url = isStaging ? "/images" : "http://localhost:5000/uploads/bookCovers"
 
   useEffect(() => {
     if (location.search !== "") {
