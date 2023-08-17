@@ -51,46 +51,6 @@ const mockedBooks = [
         "public": true,
         "mimetype": "application/pdf",
         "artist": []
-    },
-    {
-        "tags": [],
-        "_id": "644b939adfdba37c0f67a9c4",
-        "title": "(一般小説) [葵せきな]髪の毛探偵 石神くん1 ~ひとりぼっちの桜の亡霊~.",
-        "description": "「これが誰のものか、調べてほしいの」\r\n\r\n俺の名前は石神永助、人よりちょっと髪の毛を愛してやまない中学2年生。\r\nチャームポイントは美しく伸ばしたポニーテールだ。\r\n\r\nある日、クラスメイトの狩野さんに、彼女が拾った髪の毛の主を探してほしいと依頼された。\r\n報酬は、俺の自慢のポニーテールを敵視する、頭髪検査の反省文免除。\r\nさぁ、これはやるしかない！？\r\n\r\n髪の毛ミステリーここに登場！\r\n\r\n＜登場人物＞\r\n石神永助　（いしがみ・えいすけ）\r\n自他共に認める髪フェチの中学２年生。髪の見た目・手触り・匂いで主を特定できる能力を持つ。特に好きな髪は長く伸ばしたまっすぐな黒髪。\r\n\r\n狩野麗奈　（かりの・れいな）\r\n石神のクラスメイト。クラス委員長兼風紀委員長もつとめるしっかり者。男子には怖がられているが、女子からは絶大な信頼を得ている。必須アイテムはリップクリーム。\r\n\r\n＜著者＞\r\n　1983年生まれの乙女座のA型。千葉県育ち東京都在住の文章クリエイター。\r\n　ライブドアブログ・impress QuickBooks主催「ライトなラノベコンテスト」にて、『明日が雨でも晴れでも』が特別賞受賞。\r\n\r\n★公式サイト「白兎ワークス」：http://whiterabbitworks.wordpress.com/\r\n★ブログ「原点回帰―Running possible―」：http://mfineocean.blog98.fc2.com\r\n★Twitter：@harumima",
-        "bookType": {
-            "_id": "644973de54c436d52366f2b7",
-            "name": "light novel",
-            "createdAt": "2023-04-26T18:56:30.511Z",
-            "updatedAt": "2023-04-26T18:56:30.511Z",
-            "__v": 0
-        },
-        "artist": [
-            {
-                "_id": "644bcf4ea62e8627001fed5b",
-                "name": "moso",
-                "createdAt": "2023-04-28T13:51:10.899Z",
-                "updatedAt": "2023-04-28T13:51:10.899Z",
-                "__v": 0
-            }
-        ],
-        "publishDate": "2014-12-04T00:00:00.000Z",
-        "pageCount": 73,
-        "coverImage": "2546b8b94ab23a96a14a41ac87596ecf",
-        "file": "fbb7c8bedfe160a5b61223779ce2f102.epub",
-        "mimetype": "application/epub+zip",
-        "author": [
-            {
-                "_id": "644b91731017395a723b793b",
-                "name": "Harumi Madoka",
-                "createdAt": "2023-04-28T09:27:15.428Z",
-                "updatedAt": "2023-04-28T09:27:15.428Z",
-                "__v": 0
-            }
-        ],
-        "public": false,
-        "createdAt": "2023-04-28T09:36:26.448Z",
-        "updatedAt": "2023-04-28T14:43:12.740Z",
-        "__v": 1
     }
 ]
 

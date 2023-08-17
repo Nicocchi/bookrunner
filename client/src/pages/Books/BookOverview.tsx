@@ -54,7 +54,7 @@ function BookOverview() {
 
   const params = useParams();
   const navigate = useNavigate();
-  const base_url = isStaging ? "" : "http://localhost:5000/uploads/bookCovers"
+  const base_url = isStaging ? "/images" : "http://localhost:5000/uploads/bookCovers"
 
   useEffect(() => {
     if (import.meta.env.VITE_APP_MODE === "staging") {
@@ -216,7 +216,7 @@ function BookOverview() {
   const viewBook = (id: string) => {
     localStorage.setItem("contentId", id);
     localStorage.setItem("mimetype", book.mimetype);
-    window.open(`/book/viewer`, "_blank");
+    window.open("/bookrunner/book/viewer", "_blank");
   };
 
   const deleteBook = () => {

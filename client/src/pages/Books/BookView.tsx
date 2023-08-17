@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Button, Text } from "@nextui-org/react";
 // import { ArrowCircleRight, ArrowCircleLeft } from "@icon-park/react";
 
+import BOOKPDF from "../../api/books/392e79679ccbdd0ea68833fe17ff288a.pdf";
+
 import Cursor from "../../components/Cursor/Cursor";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
@@ -36,15 +38,17 @@ const BookView = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // do stuff here
+    let isStaging = false;
+    if (import.meta.env.VITE_APP_MODE === "staging") {
+      isStaging = true;
+    }
     const file = localStorage.getItem("contentId");
     const mt = localStorage.getItem("mimetype") || "";
     setMimetype(mt);
-    setDocument(`http://localhost:5000/uploads/books/${file}`);
-
+    setDocument(isStaging ? BOOKPDF : `"http://localhost:5000/uploads/books"/${file}`);
   }, []);
 
-  const onDocumentLoadSuccess = ({ numPages }: {numPages: number}) => {
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
   };
 
@@ -93,7 +97,7 @@ const BookView = () => {
         <Cursor isLeft={isLeft} isNormal={isNormal} />
         <div className="container__document">
           <TransformWrapper>
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment
           @ts-ignore */}
             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
               <>
@@ -191,7 +195,7 @@ const BookView = () => {
       </div>
     );
   } else {
-    return (<div></div>)
+    return <div></div>;
   }
 };
 
