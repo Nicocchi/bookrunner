@@ -192,7 +192,7 @@ function Library() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const base_url = isStaging ? "/images" : "http://localhost:5000/uploads/bookCovers"
+  const base_url = "http://localhost:5000/uploads/bookCovers"
 
   useEffect(() => {
     if (location.search !== "") {
@@ -471,7 +471,7 @@ function Library() {
                   ></Card.Header>
                   <Card.Body css={{ p: 0 }}>
                     <Card.Image
-                      src={`${base_url}/${b?.coverImage}`}
+                      src={isStaging ? b?.coverImage : `${base_url}/${b?.coverImage}`}
                       width="100%"
                       height="100%"
                       objectFit="cover"

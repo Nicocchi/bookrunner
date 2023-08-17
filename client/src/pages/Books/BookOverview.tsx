@@ -54,7 +54,7 @@ function BookOverview() {
 
   const params = useParams();
   const navigate = useNavigate();
-  const base_url = isStaging ? "/images" : "http://localhost:5000/uploads/bookCovers"
+  const base_url = "http://localhost:5000/uploads/bookCovers"
 
   useEffect(() => {
     if (import.meta.env.VITE_APP_MODE === "staging") {
@@ -267,7 +267,7 @@ function BookOverview() {
             }}
           >
             <Image
-              src={`${base_url}/${book?.coverImage}`}
+              src={isStaging ? book?.coverImage : `${base_url}/${book?.coverImage}`}
               width={240}
               height={341}
               objectFit="cover"
