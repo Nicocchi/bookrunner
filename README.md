@@ -1,8 +1,8 @@
 <h1 align="center">
-    <a href="https://nicocchi.github.io/bookrunner/">
+    <a href="https://nicocchi.github.io/bookrunner/#gh-dark-mode-only">
     <img src="docs/logo_light.png#gh-dark-mode-only">
     </a>
-    <a href="https://nicocchi.github.io/bookrunner/">
+    <a href="https://nicocchi.github.io/bookrunner/#gh-dark-mode-only">
     <img src="docs/logo_dark.png#gh-light-mode-only">
     </a>
 </h1>
