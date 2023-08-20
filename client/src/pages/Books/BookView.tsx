@@ -8,7 +8,6 @@ import { Button, Text } from "@nextui-org/react";
 // import { ArrowCircleRight, ArrowCircleLeft } from "@icon-park/react";
 
 import BOOKPDF from "../../assets/392e79679ccbdd0ea68833fe17ff288a.pdf";
-
 import Cursor from "../../components/Cursor/Cursor";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 

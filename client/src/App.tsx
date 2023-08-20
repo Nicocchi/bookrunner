@@ -17,6 +17,7 @@ function App() {
   useEffect(() => {
     if (import.meta.env.VITE_APP_MODE === "staging") {
       setIsStaging(true);
+      console.log("Is in staging mode. Not all features will work in this mode.");
       getAllBooks().then((res: any) => {
         setBooks(res.data.books);
       });
