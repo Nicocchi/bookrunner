@@ -39,7 +39,8 @@ function App() {
   const viewBook = (id: string, mimetype: string) => {
     localStorage.setItem("contentId", id);
     localStorage.setItem("mimetype", mimetype);
-    window.open(`/book/viewer`, "_blank");
+    navigate("/book/viewer");
+    // window.open(`/bookrunner/book/viewer`, "_blank");
   };
 
   return (

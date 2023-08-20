@@ -216,7 +216,8 @@ function BookOverview() {
   const viewBook = (id: string) => {
     localStorage.setItem("contentId", id);
     localStorage.setItem("mimetype", book.mimetype);
-    window.open("/bookrunner/book/viewer", "_blank");
+    navigate("/book/viewer");
+    // window.open("/bookrunner/book/viewer", "_blank");
   };
 
   const deleteBook = () => {
