@@ -7,6 +7,7 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 const bodyParser = require("body-parser");
+const DatabaseInit = require("./orm");
 
 const indexRouter = require("./routes/index");
 const authorRouter = require("./routes/authors");
@@ -15,16 +16,14 @@ const bookTypesRouter = require("./routes/bookTypes");
 const artistRouter = require("./routes/artists");
 const tagRouter = require("./routes/tags");
 const genreRouter = require("./routes/genres");
+const registerRouter = require("./routes/register");
+const loginRouter = require("./routes/login");
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const mongoose = require("mongoose");
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
-const db = mongoose.connection;
-db.on("error", (error) => console.error(error));
-db.once("open", () => console.log("Connected to Mongoose"));
+init();
 
 app.use("/", indexRouter);
 app.use("/authors", authorRouter);
@@ -33,5 +32,11 @@ app.use("/book-types", bookTypesRouter);
 app.use("/artists", artistRouter);
 app.use("/tags", tagRouter);
 app.use("/genres", genreRouter);
+app.use("/register", registerRouter);
+app.use("/login", loginRouter);
 
 app.listen(process.env.PORT || 5000);
+
+async function init() {
+  await DatabaseInit();
+}
